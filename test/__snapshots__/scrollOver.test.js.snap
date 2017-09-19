@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`scrollOver component 1`] = `
+<div>
+  测试数据
+</div>
+`;
