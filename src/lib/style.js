@@ -7,9 +7,9 @@ const options = get()
  * @returns {*}
  */
 export const addFilter = () => {
-    if (typeof global !== 'object' && global.global !== global) {
-        const document = window.document,
-            el = document.createElement('style')
+    const document = window && window.document,
+        el = document && document.createElement('style')
+    if (el && el.append) {
         el.setAttribute('type', 'text/css')
         el.append(`.${options.filterName}{${options.filter}}`)
         document.head.appendChild(el)

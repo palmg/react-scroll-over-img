@@ -9,8 +9,8 @@ test('environment default values', () => {
         flowDelay: 10,
         flowNUmber: 2,
         empty: 'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==',
-        filterName:'react-scroll-over-img-filter',
-        filter:'.react-scroll-over-img-filter{filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);}'
+        filterName:'react-scroll-over-img-filter', //过滤样式名称
+        filter:'filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);'
     })
 })
 
@@ -24,7 +24,7 @@ test('setting & getting environment options', () => {
         flowDelay: 10,
         flowNUmber: 2,
         empty: '',
-        filterName:'react-scroll-over-img-filter',
-        filter:'.react-scroll-over-img-filter{filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);}'
+        filterName:'react-scroll-over-img-filter', //过滤样式名称
+        filter:'filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);'
     })
 })

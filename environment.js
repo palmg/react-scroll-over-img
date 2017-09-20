@@ -31,11 +31,7 @@ var defines = {
     flowNUmber: 2, //流水线个数
     empty: 'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==', //空白图片
     filterName: 'react-scroll-over-img-filter', //过滤样式名称
-    filter: '.react-scroll-over-img-filter{filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);}' //加载页面的毛玻璃效果
+    filter: 'filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);' //加载页面的毛玻璃效果
 };
-
-module.exports = {
-    set: set,
-    get: get
-};
+module.exports = { set: set, get: get };
 module.exports.default = module.exports;

@@ -3,12 +3,6 @@
 exports[`img component 1`] = `
 <img
   className="className"
-  loadClassName={false}
-  loadSrc="loadSrc"
-  onOff={false}
-  over={false}
-  register={[Function]}
-  remove={[Function]}
   src="src"
 />
 `;

@@ -5,7 +5,13 @@ import {addFilter} from './lib/style'
 import scrollOver from './scrollOver'
 import registerFlow from './lib/flow'
 
-const options = get()
+const options = get(),
+    extAttribute = [`loadSrc`, `onOff`, `loadClassName`, `register`, `remove`, `over`],
+    removeAttribute = (params) => {
+        for (let name of extAttribute) {
+            delete params[name]
+        }
+    }
 /**
  * 图片滚动加载组件，当图片滚动进入浏览器的显示区域时会出发显示
  * @param onOff: 图片延迟加载的开关，默认会使用全局的onOff配置参数
@@ -20,7 +26,7 @@ const Img = scrollOver()(class extends React.Component {
         const {src, onOff, className} = this.props
         this.state = {
             className: className,
-            src: onOff ? res.empty : src
+            src: onOff ? options.empty : src
         }
         this.loadedHandle = this.loadedHandle.bind(this)
     }
@@ -34,16 +40,16 @@ const Img = scrollOver()(class extends React.Component {
         if (nextProps.over) {
             const {loadClassName, className, loadSrc, src} = this.props
             this.setState({
-                className: `${loadClassName} ${className}`,
+                className: `${loadClassName} ${className?className:''}`,
                 src: loadSrc
             })
             registerFlow(src, this.loadedHandle)
         }
     }
 
-    loadedHandle(src) {
-        this.setState({
-            src,
+    loadedHandle(result) {
+        result && result.suc && this.setState({
+            src: result.src,
             className: this.props.className
         })
     }
@@ -57,6 +63,7 @@ const Img = scrollOver()(class extends React.Component {
             delete params.src
         }
         params.className = className
+        removeAttribute(params)
         return (
             <img ref={ref => {
                 this.img = ref

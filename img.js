@@ -28,7 +28,34 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var options = (0, _environment.get)();
+var options = (0, _environment.get)(),
+    extAttribute = ['loadSrc', 'onOff', 'loadClassName', 'register', 'remove', 'over'],
+    removeAttribute = function removeAttribute(params) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = extAttribute[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var name = _step.value;
+
+            delete params[name];
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+};
 /**
  * 图片滚动加载组件，当图片滚动进入浏览器的显示区域时会出发显示
  * @param onOff: 图片延迟加载的开关，默认会使用全局的onOff配置参数
@@ -58,7 +85,7 @@ var Img = (0, _scrollOver2.default)()(function (_React$Component) {
 
         _this.state = {
             className: className,
-            src: onOff ? res.empty : src
+            src: onOff ? options.empty : src
         };
         _this.loadedHandle = _this.loadedHandle.bind(_this);
         return _this;
@@ -85,7 +112,7 @@ var Img = (0, _scrollOver2.default)()(function (_React$Component) {
                     src = _props2.src;
 
                 this.setState({
-                    className: loadClassName + ' ' + className,
+                    className: loadClassName + ' ' + (className ? className : ''),
                     src: loadSrc
                 });
                 (0, _flow2.default)(src, this.loadedHandle);
@@ -93,9 +120,9 @@ var Img = (0, _scrollOver2.default)()(function (_React$Component) {
         }
     }, {
         key: 'loadedHandle',
-        value: function loadedHandle(src) {
-            this.setState({
-                src: src,
+        value: function loadedHandle(result) {
+            result && result.suc && this.setState({
+                src: result.src,
                 className: this.props.className
             });
         }
@@ -115,6 +142,7 @@ var Img = (0, _scrollOver2.default)()(function (_React$Component) {
                 delete params.src;
             }
             params.className = className;
+            removeAttribute(params);
             return _react2.default.createElement('img', _extends({ ref: function ref(_ref2) {
                     _this2.img = _ref2;
                 } }, params));
