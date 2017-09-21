@@ -62,7 +62,8 @@ module.exports = {
             template: path.resolve(__dirname, './index.tpl.html'),
         }),
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+            '__scrollOverImgOptions':{onOff:true}
         })
     ]
 }

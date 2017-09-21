@@ -19,10 +19,9 @@
  * flowNumber：流水线，可以同时加载的图片数。
  */
 
-import env from '../environment'
+import {get} from './environment'
 
-const environment = env.get()
-//default config
+const environment = get()
 
 /**
  * 图片流水线，在动态渲染时，所有的图片都会添加到流水线上，然后逐一渲染
@@ -35,11 +34,12 @@ let isStop = true, //处理标记，表示当前流水线是否处于处理中
 /**
  * (接口)注册一个加载原图回调，向流水线增加一个处理节点
  * @param {string} src 原始图片路径
+ * @param {object} img 对象，可以通过new Image创建
  * @param {function} callback 回调函数 (src)=>{}
  */
-const registerFLow = (src, callback) => {
+const registerFLow = (src, img, callback) => {
         //向流水线队尾部增加对象
-        flowList.push({src, callback});
+        flowList.push({src, img, callback});
         isStop && (() => {
             timerId && clearTimeout(timerId);
             timerId = setTimeout(loadOneStream(), environment.flowDelay);
@@ -75,8 +75,7 @@ const registerFLow = (src, callback) => {
      * @param item
      */
     loadImg = (item) => {
-        const img = new Image(),
-            {src, callback} = item
+        const {src, img, callback} = item
         img.src = src
         img.onerror = img.onabort = () =>
             resultHandle(callback, 'NONE')
@@ -86,8 +85,6 @@ const registerFLow = (src, callback) => {
             img.onload = () =>
                 resultHandle(callback, src)
         }
-        //用于单元测试
-        environment.isUnitTest && resultHandle(callback, img)
     };
 
 module.exports = registerFLow

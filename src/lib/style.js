@@ -1,4 +1,4 @@
-import {get} from '../environment'
+import {get} from './environment'
 
 const options = get()
 

@@ -6,7 +6,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _environment = require('./environment');
+var _environment = require('./lib/environment');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

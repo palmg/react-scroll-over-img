@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react'
-import {get} from './environment'
+import {get} from './lib/environment'
 
 //---处理区域滚动
 let scrollData = null;

@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react'
-import {get} from './environment'
+import {get} from './lib/environment'
 import {addFilter} from './lib/style'
 import scrollOver from './scrollOver'
 import registerFlow from './lib/flow'
@@ -33,7 +33,7 @@ const Img = scrollOver()(class extends React.Component {
 
     componentDidMount() {//初始化加载
         const {onOff, register} = this.props
-        onOff && register(this.img)
+        onOff && register(this.img) //需要获取到真实的dom，用于确定其是否滚入可视区域
     }
 
     componentWillReceiveProps(nextProps) {
@@ -43,7 +43,7 @@ const Img = scrollOver()(class extends React.Component {
                 className: `${loadClassName} ${className?className:''}`,
                 src: loadSrc
             })
-            registerFlow(src, this.loadedHandle)
+            registerFlow(src, new Image(), this.loadedHandle)
         }
     }
 

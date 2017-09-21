@@ -1,12 +1,12 @@
 {
   "name": "react-scroll-over-img",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "browser scrolling check tool. if <img> scroll over browser's window, it will show.",
   "main": "index.js",
   "scripts": {
     "babel": "babel ./src/ -d ./",
-    "test": "jest",
-    "example": "webpack-dev-server --progress --colors --inline --config ./example/webpack"
+    "test": "npm run babel && jest",
+    "example": "npm run babel && webpack-dev-server --progress --colors --inline --config ./example/webpack"
   },
   "repository": {
     "type": "git",

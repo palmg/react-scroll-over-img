@@ -8,7 +8,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _environment = require('./environment');
+var _environment = require('./lib/environment');
 
 var _style = require('./lib/style');
 
@@ -99,7 +99,7 @@ var Img = (0, _scrollOver2.default)()(function (_React$Component) {
                 onOff = _props.onOff,
                 register = _props.register;
 
-            onOff && register(this.img);
+            onOff && register(this.img); //需要获取到真实的dom，用于确定其是否滚入可视区域
         }
     }, {
         key: 'componentWillReceiveProps',
@@ -115,7 +115,7 @@ var Img = (0, _scrollOver2.default)()(function (_React$Component) {
                     className: loadClassName + ' ' + (className ? className : ''),
                     src: loadSrc
                 });
-                (0, _flow2.default)(src, this.loadedHandle);
+                (0, _flow2.default)(src, new Image(), this.loadedHandle);
             }
         }
     }, {
