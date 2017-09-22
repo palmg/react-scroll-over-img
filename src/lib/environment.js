@@ -32,6 +32,7 @@ const initValue = () => {
         flowNUmber: 2,//流水线个数
         empty: 'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==', //空白图片
         filterName: 'react-scroll-over-img-filter', //过滤样式名称
-        filter: 'filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);' //加载页面的毛玻璃效果
+        filter: 'filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);', //加载页面的毛玻璃效果
+        extParams : ['onOff', 'loadSrc', 'loadClassName', 'extParams'] // Img组件的扩展组件 ，除此之外还有'register', 'remove', 'over'，名称有scrollOver组件内部决定
     }
 let hasInit = false

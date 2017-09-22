@@ -38,6 +38,12 @@ window.addEventListener('scroll', ()=> {
  * @returns {function(*=)}
  */
 const scrollOver = (inOff = true, registerName = 'register', removeName = 'remove', emitName = 'over') => {
+    //扩展变量
+    const extParams = [].concat(get().extParams), screen = {}
+    extParams.push(registerName)
+    extParams.push(removeName)
+    extParams.push(emitName)
+    screen['extParams'] = extParams
     return (Comp) => {
         class ScrollOver extends React.Component {
             constructor(...props) {
@@ -45,6 +51,8 @@ const scrollOver = (inOff = true, registerName = 'register', removeName = 'remov
                 this.registerHandle = this.registerHandle.bind(this)
                 this.removeHandle = this.removeHandle.bind(this)
                 this.scrollHandle = this.scrollHandle.bind(this)
+                screen[registerName] = this.registerHandle
+                screen[removeName] = this.removeHandle
                 this.state = {over: false}
             }
 
@@ -78,10 +86,7 @@ const scrollOver = (inOff = true, registerName = 'register', removeName = 'remov
             }
 
             render() {
-                const screen = {};
-                screen[registerName] = this.registerHandle;
-                screen[removeName] = this.removeHandle;
-                screen[emitName] = this.state.over;
+                screen[emitName] = this.state.over
                 const props = Object.assign({}, this.props, screen);
                 return <Comp {...props} />
             }

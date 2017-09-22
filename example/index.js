@@ -1,6 +1,6 @@
 import React from 'react'
 import {render} from 'react-dom'
-import Img from '../index'
+import Img from '../src/img'
 
 render(<div>
     <Img

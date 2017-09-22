@@ -58,6 +58,13 @@ var scrollOver = function scrollOver() {
     var removeName = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'remove';
     var emitName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'over';
 
+    //扩展变量
+    var extParams = [].concat((0, _environment.get)().extParams),
+        screen = {};
+    extParams.push(registerName);
+    extParams.push(removeName);
+    extParams.push(emitName);
+    screen['extParams'] = extParams;
     return function (Comp) {
         var ScrollOver = function (_React$Component) {
             _inherits(ScrollOver, _React$Component);
@@ -76,6 +83,8 @@ var scrollOver = function scrollOver() {
                 _this.registerHandle = _this.registerHandle.bind(_this);
                 _this.removeHandle = _this.removeHandle.bind(_this);
                 _this.scrollHandle = _this.scrollHandle.bind(_this);
+                screen[registerName] = _this.registerHandle;
+                screen[removeName] = _this.removeHandle;
                 _this.state = { over: false };
                 return _this;
             }
@@ -120,9 +129,6 @@ var scrollOver = function scrollOver() {
             }, {
                 key: 'render',
                 value: function render() {
-                    var screen = {};
-                    screen[registerName] = this.registerHandle;
-                    screen[removeName] = this.removeHandle;
                     screen[emitName] = this.state.over;
                     var props = Object.assign({}, this.props, screen);
                     return _react2.default.createElement(Comp, props);
