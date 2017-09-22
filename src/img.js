@@ -76,7 +76,7 @@ const Img = scrollOver()(class extends React.Component {
 Img.defaultProps = {
     loadSrc: options.empty,
     onOff: (() => {
-        return true //(typeof global === 'object') && (global.global === global)
+        return (typeof global === 'object') && (global.global === global)
     })() ? false : options.onOff,
     loadClassName: addFilter()
 }

@@ -158,7 +158,7 @@ var Img = (0, _scrollOver2.default)()(function (_React$Component) {
 Img.defaultProps = {
     loadSrc: options.empty,
     onOff: function () {
-        return true; //(typeof global === 'object') && (global.global === global)
+        return (typeof global === 'undefined' ? 'undefined' : _typeof(global)) === 'object' && global.global === global;
     }() ? false : options.onOff,
     loadClassName: (0, _style.addFilter)()
 };
