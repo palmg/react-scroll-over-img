@@ -8,7 +8,8 @@ test('environment default values', () => {
         flowDelay: 10,
         flowNUmber: 2,
         empty: 'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==',
-        filterName:'react-scroll-over-img-filter', //过滤样式名称
+        scrollDom: document ? document.body : {},
+        filterName:'react-scroll-over-img-filter',
         filter:'filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);',
         extParams : ['onOff', 'loadSrc', 'loadClassName', 'extParams']
     })

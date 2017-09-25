@@ -3,8 +3,9 @@ import React from 'react'
 import {get} from './lib/environment'
 
 //---处理区域滚动
-let scrollData = null;
-const setScreenScroll = ()=> {
+let scrollData = null, scrollDom = get().scrollDom
+'object' !== typeof scrollDom && (scrollDom = document.getElementById(scrollDom))
+const setScreenScroll = () => {
         const screenTop = window.pageYOffset ? window.pageYOffset : window.document.documentElement.scrollTop,
             screenBottom = screenTop + Number(window.innerHeight ? window.innerHeight : document.documentElement.clientHeight);
         scrollData = {
@@ -22,7 +23,7 @@ const setScreenScroll = ()=> {
         return ref.getBoundingClientRect().top + window.document.documentElement.scrollTop + window.document.body.scrollTop;
     };
 setScreenScroll();
-window.addEventListener('scroll', ()=> {
+window.addEventListener('scroll', () => {
     setScreenScroll();
 });
 //-----

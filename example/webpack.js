@@ -7,7 +7,7 @@ module.exports = {
     context: path.resolve(__dirname),
     entry: {
         bundle: './index.js',
-        vendor: ['react','react-dom']
+        vendor: ['react', 'react-dom']
     },
     output: {
         path: path.resolve(__dirname, "./"),
@@ -20,7 +20,7 @@ module.exports = {
             test: /\.js$/,
             use: [{
                 loader: 'babel-loader',
-                options: { presets: ['es2015', 'stage-0', 'react'] }
+                options: {presets: ['es2015', 'stage-0', 'react']}
             }],
             exclude: /node_modules/
         }, {
@@ -29,9 +29,9 @@ module.exports = {
                 'style-loader',
                 'css-loader?modules&camelCase&importLoaders=1&localIdentName=[local][hash:base64:8]',
                 {
-                    loader:'postcss-loader',
+                    loader: 'postcss-loader',
                     options: {
-                        plugins: function() {
+                        plugins: function () {
                             return [
                                 require('autoprefixer')()
                             ];
@@ -42,7 +42,7 @@ module.exports = {
             ]
         }, {
             test: /\.(png|jpg|svg)$/,
-            use:['url-loader?limit=25000']
+            use: ['url-loader?limit=25000']
         }, {
             test: /\.json$/,
             use: ['json-loader']
@@ -63,7 +63,7 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-            '__scrollOverImgOptions':{onOff:true}
+            '__scrollOverImgOptions': {onOff: true, scrollDom: 'body-1'}
         })
     ]
 }
