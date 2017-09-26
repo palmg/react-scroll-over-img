@@ -63,7 +63,7 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-            '__scrollOverImgOptions': {onOff: true, scrollDom: 'body-1'}
+            __scrollOverImgOptions: '{"onOff": true, "scrollDom": "box-1"}'
         })
     ]
 }

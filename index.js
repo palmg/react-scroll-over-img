@@ -1,6 +1,6 @@
 'use strict';
 
-var _img = require('./img');
+var _img = require('./lib/img');
 
 var _img2 = _interopRequireDefault(_img);
 

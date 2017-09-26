@@ -1,9 +1,9 @@
 'use strict';
 import React from 'react'
-import {get} from './lib/environment'
-import {addFilter} from './lib/style'
-import scrollOver from './scrollOver'
-import registerFlow from './lib/flow'
+import {get} from './environment'
+import {addFilter} from './style'
+import {scrollOver} from './scrollOver'
+import registerFlow from './flow'
 
 const options = get(),
     removeAttribute = (params, extParams) => {
