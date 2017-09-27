@@ -100,8 +100,8 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
             }
 
             removeHandle() {
-                scroll.scrollEl.removeEventListener('scroll', this.checkEmit)
                 scroll.removeElModifyHandle(this.handleId)
+                scroll.scrollEl.removeEventListener('scroll', this.checkEmit)
             }
 
             checkEmit() {
@@ -113,7 +113,7 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
 
             componentWillUnmount() {
                 scroll.removeElModifyHandle(this.handleId)
-                this.el.removeHandle('scroll', this.checkEmit)
+                scroll.scrollEl.removeHandle('scroll', this.checkEmit)
             }
 
 
