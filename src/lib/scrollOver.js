@@ -2,54 +2,82 @@
 import React from 'react'
 import {get} from './environment'
 
+const __element = get().scrollDom,
+    __offsetY = get().scrollOffset
+
 function Scroll() {
+    const _this = this
     this.scrollEl = false//要监控的滚动对象
-    this.preScrollEl = false//前元素
-    this.scrollData = false//界面滚动数据
-    this.disableHandleCount = 0
+    this.preScrollEl = false//前滚动对象
     this.handleList = []
+    this.viewHeight = window ? window.document.body.clientHeight : 0 //当前浏览器的视口高度
+    this.resize = function (event) {
+        _this.viewHeight = window ? window.document.body.clientHeight : 0
+    }
 }
 
-//接口1，设定当前要滚动监控的对象
 Scroll.prototype.setElement = function (el) {
     let scrollEl = 'object' === typeof el ? el : document.getElementById(el)
     !scrollEl && (() => {
         scrollEl = window.document.body
     })()
-    scrollEl.addEventListener('scroll', () => {
-        this.setScreenScroll();
-    });
     this.preScrollEl = this.scrollEl
     this.scrollEl = scrollEl
-    this.handleList.forEach(i=>i.act && i.cb(scrollEl))
+    this.handleList.forEach(i => i.act && i.cb(scrollEl))
 }
-//获取某个界面元素的位置
-Scroll.prototype.getElementTop = function (el) {
-    return el.getBoundingClientRect().top + window.document.documentElement.scrollTop + this.scrollEl.scrollTop;
+/**
+ * 判断指定元素是否进入视口（用户可视区域）
+ * @param el
+ * @returns {boolean}
+ */
+Scroll.prototype.elementInView = function (el) {
+    return __offsetY < this.viewHeight - el.getBoundingClientRect().top
 }
-Scroll.prototype.setScreenScroll = function () {
-    const screenTop = window.pageYOffset ? window.pageYOffset : this.scrollEl.scrollTop,
-        screenBottom = screenTop + Number(window.innerHeight ? window.innerHeight : this.scrollEl.clientHeight);
-    this.scrollData = {
-        top: screenTop,
-        bottom: screenBottom
-    }
-}
+/**
+ * 设定当滚动元素变更时触发的回调函数
+ * @param cb
+ * @returns {Number}
+ */
 Scroll.prototype.addElModifyHandle = function (cb) {
     const id = this.handleList.length
     this.handleList.push({act: true, cb})
     return id
 }
+/**
+ * 移除回调函数
+ * @param id
+ * @returns {Scroll}
+ */
 Scroll.prototype.removeElModifyHandle = function (id) {
     this.handleList[id].act = false
     return this
 }
-
+/**
+ * 注册滚动监听回调
+ * @param cb
+ */
+Scroll.prototype.addListener = function (cb) {
+    this.scrollEl && this.scrollEl.addEventListener('scroll', cb)
+}
+/**
+ * 移除滚动监听回调
+ * @param cb
+ */
+Scroll.prototype.removeListener = function (cb) {
+    this.scrollEl && this.scrollEl.removeEventListener('scroll', cb)
+}
+/**
+ * 重设滚动监听回调
+ * @param cb
+ */
+Scroll.prototype.setListener = function (cb) {
+    this.preScrollEl && this.preScrollEl.removeEventListener('scroll', cb)
+    this.scrollEl && this.scrollEl.addEventListener('scroll', cb)
+}
 
 const scroll = new Scroll()
-scroll.setElement(get().scrollDom)
-scroll.setScreenScroll()
-
+window.addEventListener('resize', scroll.resize)
+scroll.setElement(__element)
 const getComponentName = WrappedComponent => {
     return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
@@ -77,7 +105,7 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
         class ScrollOver extends React.Component {
             constructor(...props) {
                 super(...props)
-                this.domTop = false //当前被包装img的顶点位置
+                this.element = false //监控的img元素
                 this.registerHandle = this.registerHandle.bind(this)
                 this.removeHandle = this.removeHandle.bind(this)
                 this.elModifyHandle = this.elModifyHandle.bind(this)
@@ -87,25 +115,24 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
                 this.state = {over: false}
             }
 
-            elModifyHandle(){
-                scroll.preScrollEl.removeEventListener('scroll', this.checkEmit)
-                scroll.scrollEl.addEventListener('scroll', this.checkEmit)
+            elModifyHandle() {
+                scroll.setListener(this.checkEmit)
             }
 
-            registerHandle(dom) {
-                this.domTop = scroll.getElementTop(dom)
+            registerHandle(el) {
+                this.element = el
                 this.handleId = scroll.addElModifyHandle(this.elModifyHandle)
-                scroll.scrollEl.addEventListener('scroll', this.checkEmit)
+                scroll.addListener(this.checkEmit)
                 this.checkEmit();
             }
 
             removeHandle() {
                 scroll.removeElModifyHandle(this.handleId)
-                scroll.scrollEl.removeEventListener('scroll', this.checkEmit)
+                scroll.removeListener(this.checkEmit)
             }
 
             checkEmit() {
-                this.domTop < scroll.scrollData.bottom && (() => {
+                scroll.elementInView(this.element) && (() => {
                     inOff && this.removeHandle()
                     this.setState({over: true})
                 })();
@@ -113,9 +140,8 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
 
             componentWillUnmount() {
                 scroll.removeElModifyHandle(this.handleId)
-                scroll.scrollEl.removeEventListener('scroll', this.checkEmit)
+                scroll.removeListener(this.checkEmit)
             }
-
 
             shouldComponentUpdate(nextProps, nextState) {
                 return 'all' === get().renderMode ? true : this.state !== nextState//不允许外部props变更导致组件进行融合计算，只允许一次初始化

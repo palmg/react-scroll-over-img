@@ -9,6 +9,7 @@ test('environment default values', () => {
         flowNUmber: 2,
         empty: 'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==',
         scrollDom: document ? document.body : {},
+        scrollOffset: -25,
         filterName:'react-scroll-over-img-filter',
         filter:'filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);',
         extParams : ['onOff', 'loadSrc', 'loadClassName', 'extParams']

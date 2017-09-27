@@ -1,5 +1,5 @@
 import React from 'react'
-import scrollOver from '../scrollOver'
+import {scrollOver} from '../../lib/scrollOver'
 import testRender from 'react-test-renderer'
 
 test('scrollOver component', ()=>{

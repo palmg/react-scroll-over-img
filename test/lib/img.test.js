@@ -1,5 +1,5 @@
 import React from 'react'
-import Img from '../img'
+import Img from '../../lib/img'
 import testRender from 'react-test-renderer'
 
 test('img component', ()=>{//仅测试直接渲染

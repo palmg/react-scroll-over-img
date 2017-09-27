@@ -32,6 +32,7 @@ const initValue = () => {
         flowNUmber: 2,//流水线个数
         empty: 'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==', //空白图片
         scrollDom: document ? document.body : {}, //用于判断滚动的DOM。默认为body，当页面的全局滚动效果实在某一个标签之内，需要通过该参数设定
+        scrollOffset: -25, //图片滚动加载的偏移量。负数表示向上偏移向下滚动时会被更早加载。整数表示向下偏移，会被更晚加载
         filterName: 'react-scroll-over-img-filter', //过滤样式名称
         filter: 'filter: blur(.5rem);filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);', //加载页面的毛玻璃效果
         extParams : ['onOff', 'loadSrc', 'loadClassName', 'extParams'] // Img组件的扩展组件 ，除此之外还有'register', 'remove', 'over'，名称有scrollOver组件内部决定
