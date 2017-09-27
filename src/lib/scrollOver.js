@@ -10,7 +10,7 @@ function Scroll() {
     this.scrollEl = false//要监控的滚动对象
     this.preScrollEl = false//前滚动对象
     this.handleList = []
-    this.bodyElement = 'undefined' !== typeof window ? window.document.body : {clientHeight:0} //当前浏览器的视口高度
+    this.bodyElement = 'undefined' !== typeof window ? window.document.body : {clientHeight: 0} //当前浏览器的视口高度
 }
 
 Scroll.prototype.setElement = function (el) {
@@ -84,18 +84,25 @@ export const bind = (dom) => {
 /**
  * 判断当前元素是否已经滚动到屏幕内，目前只提供一次监控——当元素由下至上滚入屏幕区域时进行事件通知。
  * 需要注意的是组件只允许初始化一次，随后无法通过props修改组件的UI只能内部状态修改。
- * @param inOff 标记当元素滚动进入屏幕区域后，是否移除监听，默认为true
- * @param registerName 注册处理器的名称，默认为 'register'，调用props.registerScrollIn(Dom)，Dom表示真实Dom
- * @param removeName 移除处理器名称，默认为'remove'，调用方式props.removeScrollIn().
- * @param emitName 元素滚入屏幕范围的通知名称，默认为'over'，当元素滚入屏幕时，会被设置为ture,区域外为false。
+ * @param {object} options {
+ *  {boolean} inOff 标记当元素滚动进入屏幕区域后，是否移除监听，默认为true
+ *  {string} registerName 例如将其设定为myRegister,那么在子元素中使用props.myRegister(element)设定要监控滚入的元素。
+ *  {string} removeName 移除处理器名称，默认为'remove'，调用方式props.removeScrollIn().
+ *  {string} emitName 元素滚入屏幕范围的通知名称，默认为'over'，当元素滚入屏幕时，会被设置为ture,区域外为false。
+ * }
  * @returns {function(*=)}
  */
-export const scrollOver = (inOff = true, registerName = 'register', removeName = 'remove', emitName = 'over') => {
+export const scrollOver = (options = {
+    inOff: true,
+    registerName: 'register',
+    removeName: 'remove',
+    emitName: 'over'
+}) => {
     //扩展变量
     const extParams = [].concat(get().extParams), screen = {}
-    extParams.push(registerName)
-    extParams.push(removeName)
-    extParams.push(emitName)
+    extParams.push(options.registerName)
+    extParams.push(options.removeName)
+    extParams.push(options.emitName)
     screen['extParams'] = extParams
     return (Comp) => {
         class ScrollOver extends React.Component {
@@ -106,8 +113,8 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
                 this.removeHandle = this.removeHandle.bind(this)
                 this.elModifyHandle = this.elModifyHandle.bind(this)
                 this.checkEmit = this.checkEmit.bind(this)
-                screen[registerName] = this.registerHandle
-                screen[removeName] = this.removeHandle
+                screen[options.registerName] = this.registerHandle
+                screen[options.removeName] = this.removeHandle
                 this.state = {over: false}
             }
 
@@ -129,7 +136,7 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
 
             checkEmit() {
                 scroll.elementInView(this.element) && (() => {
-                    inOff && this.removeHandle()
+                    options.inOff && this.removeHandle()
                     this.setState({over: true})
                 })();
             }
@@ -144,7 +151,7 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
             }
 
             render() {
-                screen[emitName] = this.state.over
+                screen[options.emitName] = this.state.over
                 const props = Object.assign({}, this.props, screen);
                 return <Comp {...props} />
             }
