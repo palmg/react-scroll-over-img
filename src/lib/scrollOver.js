@@ -113,7 +113,7 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
 
             componentWillUnmount() {
                 scroll.removeElModifyHandle(this.handleId)
-                scroll.scrollEl.removeHandle('scroll', this.checkEmit)
+                scroll.scrollEl.removeEventListener('scroll', this.checkEmit)
             }
 
 
