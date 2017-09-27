@@ -10,16 +10,13 @@ function Scroll() {
     this.scrollEl = false//要监控的滚动对象
     this.preScrollEl = false//前滚动对象
     this.handleList = []
-    this.viewHeight = window ? window.document.body.clientHeight : 0 //当前浏览器的视口高度
-    this.resize = function (event) {
-        _this.viewHeight = window ? window.document.body.clientHeight : 0
-    }
+    this.bodyElement = window ? window.document.body : {clientHeight:0} //当前浏览器的视口高度
 }
 
 Scroll.prototype.setElement = function (el) {
     let scrollEl = 'object' === typeof el ? el : document.getElementById(el)
     !scrollEl && (() => {
-        scrollEl = window.document.body
+        scrollEl = this.bodyElement
     })()
     this.preScrollEl = this.scrollEl
     this.scrollEl = scrollEl
@@ -31,7 +28,7 @@ Scroll.prototype.setElement = function (el) {
  * @returns {boolean}
  */
 Scroll.prototype.elementInView = function (el) {
-    return __offsetY < this.viewHeight - el.getBoundingClientRect().top
+    return __offsetY < this.bodyElement.clientHeight - el.getBoundingClientRect().top
 }
 /**
  * 设定当滚动元素变更时触发的回调函数
@@ -76,7 +73,6 @@ Scroll.prototype.setListener = function (cb) {
 }
 
 const scroll = new Scroll()
-window.addEventListener('resize', scroll.resize)
 scroll.setElement(__element)
 const getComponentName = WrappedComponent => {
     return WrappedComponent.displayName || WrappedComponent.name || 'Component';
