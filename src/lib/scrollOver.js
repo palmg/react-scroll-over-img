@@ -10,7 +10,7 @@ function Scroll() {
     this.scrollEl = false//要监控的滚动对象
     this.preScrollEl = false//前滚动对象
     this.handleList = []
-    this.bodyElement = window ? window.document.body : {clientHeight:0} //当前浏览器的视口高度
+    this.bodyElement = 'undefined' !== typeof window ? window.document.body : {clientHeight:0} //当前浏览器的视口高度
 }
 
 Scroll.prototype.setElement = function (el) {

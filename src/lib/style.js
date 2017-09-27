@@ -7,7 +7,7 @@ const options = get()
  * @returns {*}
  */
 export const addFilter = () => {
-    const document = window && window.document,
+    const document = 'undefined' !== typeof window && window.document,
         el = document && document.createElement('style')
     if (el && el.append) {
         el.setAttribute('type', 'text/css')
