@@ -4,8 +4,8 @@ import {get} from './environment'
 
 function Scroll() {
     this.scrollEl = false//要监控的滚动对象
+    this.preScrollEl = false//前元素
     this.scrollData = false//界面滚动数据
-    this.timer = false
     this.disableHandleCount = 0
     this.handleList = []
 }
@@ -17,18 +17,11 @@ Scroll.prototype.setElement = function (el) {
         scrollEl = window.document.body
     })()
     scrollEl.addEventListener('scroll', () => {
-        if (!this.timer) {
-            this.timer = setTimeout(() => {
-                this.setScreenScroll();
-                for (let handle of this.handleList) {
-                    handle.act && handle.cb()
-                }
-                clearTimeout(this.timer)
-                this.timer = false
-            }, 220)
-        }
+        this.setScreenScroll();
     });
+    this.preScrollEl = this.scrollEl
     this.scrollEl = scrollEl
+    this.handleList.forEach(i=>i.act && i.cb(scrollEl))
 }
 //获取某个界面元素的位置
 Scroll.prototype.getElementTop = function (el) {
@@ -42,15 +35,13 @@ Scroll.prototype.setScreenScroll = function () {
         bottom: screenBottom
     }
 }
-Scroll.prototype.addHandle = function (cb) {
+Scroll.prototype.addElModifyHandle = function (cb) {
     const id = this.handleList.length
     this.handleList.push({act: true, cb})
     return id
 }
-Scroll.prototype.removeHandle = function (id) {
-    const temp = this.handleList[id].act
+Scroll.prototype.removeElModifyHandle = function (id) {
     this.handleList[id].act = false
-    temp && (++this.disableHandleCount === this.handleList.length) && (this.handleList = [])
     return this
 }
 
@@ -86,30 +77,31 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
         class ScrollOver extends React.Component {
             constructor(...props) {
                 super(...props)
+                this.domTop = false //当前被包装img的顶点位置
                 this.registerHandle = this.registerHandle.bind(this)
                 this.removeHandle = this.removeHandle.bind(this)
-                this.scrollHandle = this.scrollHandle.bind(this)
+                this.elModifyHandle = this.elModifyHandle.bind(this)
+                this.checkEmit = this.checkEmit.bind(this)
                 screen[registerName] = this.registerHandle
                 screen[removeName] = this.removeHandle
                 this.state = {over: false}
             }
 
+            elModifyHandle(){
+                scroll.preScrollEl.removeEventListener('scroll', this.checkEmit)
+                scroll.scrollEl.addEventListener('scroll', this.checkEmit)
+            }
+
             registerHandle(dom) {
                 this.domTop = scroll.getElementTop(dom)
-                this.handleId = scroll.addHandle(this.scrollHandle)
+                this.handleId = scroll.addElModifyHandle(this.elModifyHandle)
+                scroll.scrollEl.addEventListener('scroll', this.checkEmit)
                 this.checkEmit();
             }
 
             removeHandle() {
-                scroll.removeHandle(this.handleId)
-            }
-
-            componentWillUnmount() {
-                scroll.removeHandle(this.handleId)
-            }
-
-            scrollHandle() {
-                this.checkEmit()
+                scroll.scrollEl.removeEventListener('scroll', this.checkEmit)
+                scroll.removeElModifyHandle(this.handleId)
             }
 
             checkEmit() {
@@ -118,6 +110,12 @@ export const scrollOver = (inOff = true, registerName = 'register', removeName =
                     this.setState({over: true})
                 })();
             }
+
+            componentWillUnmount() {
+                scroll.removeElModifyHandle(this.handleId)
+                this.el.removeHandle('scroll', this.checkEmit)
+            }
+
 
             shouldComponentUpdate(nextProps, nextState) {
                 return 'all' === get().renderMode ? true : this.state !== nextState//不允许外部props变更导致组件进行融合计算，只允许一次初始化
