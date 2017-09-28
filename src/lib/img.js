@@ -38,13 +38,13 @@ const Img = scrollOver()(class extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.over) {
-            const {loadClassName, className, loadSrc, src} = this.props
+        if ((!this.props.over && nextProps.over && nextProps.src) || (nextProps.over && nextProps.src !== this.props.src)) {
+            const {loadClassName, className, loadSrc} = this.props
             this.setState({
                 className: `${loadClassName} ${className ? className : ''}`,
                 src: loadSrc
             })
-            registerFlow(src, new Image(), this.loadedHandle)
+            registerFlow( nextProps.src, new Image(), this.loadedHandle)
         }
     }
 
