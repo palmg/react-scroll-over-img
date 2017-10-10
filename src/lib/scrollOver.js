@@ -46,7 +46,7 @@ Scroll.prototype.addElModifyHandle = function (cb) {
  * @returns {Scroll}
  */
 Scroll.prototype.removeElModifyHandle = function (id) {
-    this.handleList[id].act = false
+    id && (this.handleList[id].act = false)
     return this
 }
 /**
@@ -130,8 +130,10 @@ export const scrollOver = (options = {
             }
 
             removeHandle() {
-                scroll.removeElModifyHandle(this.handleId)
-                scroll.removeListener(this.checkEmit)
+                if(this.handleId){
+                    scroll.removeElModifyHandle(this.handleId)
+                    scroll.removeListener(this.checkEmit)
+                }
             }
 
             checkEmit() {
@@ -142,8 +144,7 @@ export const scrollOver = (options = {
             }
 
             componentWillUnmount() {
-                scroll.removeElModifyHandle(this.handleId)
-                scroll.removeListener(this.checkEmit)
+                this.removeHandle()
             }
 
             shouldComponentUpdate(nextProps, nextState) {

@@ -1,7 +1,7 @@
 import React from 'react'
 import {render} from 'react-dom'
-import Img from '../index'
-import bind from '../bind'
+import Img from '../src/index'
+import bind from '../src/bind'
 
 class App extends React.Component {
     constructor(...props) {
