@@ -38,7 +38,12 @@ const Img = scrollOver()(class extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if ((!this.props.over && nextProps.over && nextProps.src) || (nextProps.over && nextProps.src !== this.props.src)) {
+        // 渲染条件1：当图片第一次进入可视区域时
+        // 渲染条件2：图片已经进入可视区域，图片发生变动
+        // 渲染条件3：异步渲染关闭，但是外部修改图片链接
+        if ((!this.props.over && nextProps.over && nextProps.src) ||
+            (nextProps.over && nextProps.src !== this.props.src) ||
+            (!this.props.onOff && nextProps.src !== this.props.src)){
             const {loadClassName, className, loadSrc} = this.props
             this.setState({
                 className: `${loadClassName} ${className ? className : ''}`,
