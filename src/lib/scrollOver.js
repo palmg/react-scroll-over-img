@@ -81,10 +81,28 @@ const getComponentName = WrappedComponent => {
 export const bind = (dom) => {
     scroll.setElement(dom)
 }
+const _default_ = {
+    renderMode: 'none',
+    inOff: true,
+    registerName: 'register',
+    removeName: 'remove',
+    emitName: 'over'
+},setDefault = (options) =>{
+    if(options){
+        return Object.keys(_default_).map(k=>{
+            const v = options[k]
+            return 'undefined' === typeof v ? _default_[k] : k
+        })
+    }else {
+        return _default_
+    }
+}
+
 /**
  * 判断当前元素是否已经滚动到屏幕内，目前只提供一次监控——当元素由下至上滚入屏幕区域时进行事件通知。
  * 需要注意的是组件只允许初始化一次，随后无法通过props修改组件的UI只能内部状态修改。
- * @param {object} options {
+ * @param {object} opt {
+ *  {string} renderMode 单个组件的重复渲染模式。[all|none]：all——任何变更都会导致重复渲染，none——不会发生重复渲染。
  *  {boolean} inOff 标记当元素滚动进入屏幕区域后，是否移除监听，默认为true
  *  {string} registerName 例如将其设定为myRegister,那么在子元素中使用props.myRegister(element)设定要监控滚入的元素。
  *  {string} removeName 移除处理器名称，默认为'remove'，调用方式props.removeScrollIn().
@@ -92,12 +110,8 @@ export const bind = (dom) => {
  * }
  * @returns {function(*=)}
  */
-export const scrollOver = (options = {
-    inOff: true,
-    registerName: 'register',
-    removeName: 'remove',
-    emitName: 'over'
-}) => {
+export const scrollOver = (opt) => {
+    const options = setDefault(opt)
     //扩展变量
     const extParams = [].concat(get().extParams), screen = {}
     extParams.push(options.registerName)
@@ -148,7 +162,7 @@ export const scrollOver = (options = {
             }
 
             shouldComponentUpdate(nextProps, nextState) {
-                return 'all' === get().renderMode ? true : this.state !== nextState//不允许外部props变更导致组件进行融合计算，只允许一次初始化
+                return 'all' === options.renderMode ? true : ('all' === get().renderMode ? true : this.state !== nextState)
             }
 
             render() {
