@@ -1,6 +1,6 @@
 {
   "name": "react-scroll-over-img",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "browser scrolling check tool. if <img> scroll over browser's window, it will show.",
   "main": "index.js",
   "scripts": {

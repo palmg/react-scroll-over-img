@@ -28,7 +28,10 @@ Scroll.prototype.setElement = function (el) {
  * @returns {boolean}
  */
 Scroll.prototype.elementInView = function (el) {
-    return __offsetY < this.bodyElement.clientHeight - el.getBoundingClientRect().top
+    const scrollEl = this.scrollEl,
+        height = scrollEl.tagName ? scrollEl.clientHeight : scrollEl.innerHeight,
+        top = el.getBoundingClientRect().top;
+    return __offsetY < height - top;
 }
 /**
  * 设定当滚动元素变更时触发的回调函数
@@ -87,13 +90,13 @@ const _default_ = {
     registerName: 'register',
     removeName: 'remove',
     emitName: 'over'
-},setDefault = (options) =>{
-    if(options){
-        return Object.keys(_default_).map(k=>{
+}, setDefault = (options) => {
+    if (options) {
+        return Object.keys(_default_).map(k => {
             const v = options[k]
             return 'undefined' === typeof v ? _default_[k] : k
         })
-    }else {
+    } else {
         return _default_
     }
 }
@@ -144,7 +147,7 @@ export const scrollOver = (opt) => {
             }
 
             removeHandle() {
-                if(this.handleId){
+                if (this.handleId) {
                     scroll.removeElModifyHandle(this.handleId)
                     scroll.removeListener(this.checkEmit)
                 }
