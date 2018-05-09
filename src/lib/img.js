@@ -34,9 +34,6 @@ const Img = scrollOver()(class extends React.Component {
 
     componentDidMount() {//初始化加载
         const {onOff, register} = this.props
-        console.log(this.img.className)
-        console.log(this.img.getBoundingClientRect().top)
-        console.log(this.img.offsetTop)
         onOff && register(this.img) //需要获取到真实的dom，用于确定其是否滚入可视区域
     }
 
